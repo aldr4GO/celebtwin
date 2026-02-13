@@ -7,6 +7,8 @@ import { promisify } from 'util';
 const execAsync = promisify(exec);
 
 export async function POST(request: NextRequest) {
+  console.log("🔥 API STARTED");
+
   let filePath1 = '';
   let filePath2 = '';
 
@@ -41,7 +43,10 @@ export async function POST(request: NextRequest) {
     const appDir = '/app';
 
     // ✅ safer command (no weird quoting issues)
+    console.log("⚙️ Running python...");
+
     const command = `cd ${appDir} && python3 compare_api.py "${filePath1}" "${filePath2}"`;
+    console.log("✅ Python finished");
 
     const { stdout, stderr } = await execAsync(command, {
       timeout: 120000,
