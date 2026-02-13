@@ -46,13 +46,13 @@ export async function POST(request: NextRequest) {
     console.log("⚙️ Running python...");
 
     const command = `cd ${appDir} && python3 compare_api.py "${filePath1}" "${filePath2}"`;
-    console.log("✅ Python finished");
-
+    
     const { stdout, stderr } = await execAsync(command, {
       timeout: 120000,
       maxBuffer: 10 * 1024 * 1024,
       cwd: appDir,
     });
+    console.log("✅ Python finished");
 
     if (stderr) {
       console.log("COMPARE STDERR (debug):", stderr);
