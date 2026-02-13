@@ -22,7 +22,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Create temp directory if it doesn't exist
-    const tempDir = path.join(process.cwd(), 'temp');
+    // const tempDir = path.join(process.cwd(), 'temp');
+    const tempDir = '/app/temp';
     await fs.mkdir(tempDir, { recursive: true });
 
     // Save the uploaded file
@@ -34,7 +35,9 @@ export async function POST(request: NextRequest) {
 
     try {
       // Call Python script to search for similar faces
-      const pythonScriptPath = path.join(process.cwd(), 'search_api.py');
+      // const pythonScriptPath = path.join(process.cwd(), 'search_api.py');
+      const pythonScriptPath = '/app/search_api.py';
+
       console.log("search_api.py: python script called")
       // Use python -m to ensure proper module loading
       const command = `python3 "${pythonScriptPath}" "${filePath}"`;
@@ -43,6 +46,9 @@ export async function POST(request: NextRequest) {
         timeout: 120000, // 2 minute timeout
         maxBuffer: 10 * 1024 * 1024, // 10MB buffer
       });
+      console.log("STDOUT:", stdout);
+      console.log("STDERR:", stderr);
+      
       console.log("printing stdout:start")
       console.log(stdout.trim())
       console.log("printing stdout:complete")

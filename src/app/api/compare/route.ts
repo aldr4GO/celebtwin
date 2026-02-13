@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create temp directory if it doesn't exist
-    const tempDir = path.join(process.cwd(), 'temp');
+    const tempDir = '/app/temp';
     await fs.mkdir(tempDir, { recursive: true });
 
     // Save both files
@@ -39,7 +39,8 @@ export async function POST(request: NextRequest) {
 
     try {
       // Call Python script to compare faces
-      const pythonScriptPath = path.join(process.cwd(), 'compare_api.py');
+      // const pythonScriptPath = path.join(process.cwd(), 'compare_api.py');
+      const pythonScriptPath = '/app/compare_api.py';
 
       const command = `python3 "${pythonScriptPath}" "${filePath1}" "${filePath2}"`;
 
@@ -47,6 +48,8 @@ export async function POST(request: NextRequest) {
         timeout: 120000,
         maxBuffer: 10 * 1024 * 1024,
       });
+      console.log("STDOUT:", stdout);
+      console.log("STDERR:", stderr);
       console.log("printing stdout:start")
       console.log(stdout.trim())
       console.log("printing stdout:complete")
