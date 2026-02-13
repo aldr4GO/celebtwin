@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       const pythonScriptPath = path.join(process.cwd(), 'search_api.py');
       console.log("search_api.py: python script called")
       // Use python -m to ensure proper module loading
-      const command = `python "${pythonScriptPath}" "${filePath}"`;
+      const command = `python3 "${pythonScriptPath}" "${filePath}"`;
       
       const { stdout, stderr } = await execAsync(command, {
         timeout: 120000, // 2 minute timeout

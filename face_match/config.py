@@ -5,7 +5,6 @@ CELEBA_IMG_DIR = "data/celeba/img_align_celeba"
 CELEBA_IDENTITY_FILE = "data/celeba/identity_CelebA.txt"
 
 ARTIFACT_DIR = "artifacts"
-os.makedirs(ARTIFACT_DIR, exist_ok=True)
 
 # Subset size (change later to full dataset)
 MAX_IMAGES = 200000

@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
       // Call Python script to compare faces
       const pythonScriptPath = path.join(process.cwd(), 'compare_api.py');
 
-      const command = `python "${pythonScriptPath}" "${filePath1}" "${filePath2}"`;
+      const command = `python3 "${pythonScriptPath}" "${filePath1}" "${filePath2}"`;
 
       const { stdout, stderr } = await execAsync(command, {
         timeout: 120000,
