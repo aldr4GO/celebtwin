@@ -8,6 +8,11 @@ import sys
 import json
 import os
 import numpy as np
+import logging
+
+# Suppress InsightFace and other library debug output
+logging.basicConfig(level=logging.CRITICAL)
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 # Add face_match folder to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'face_match'))
@@ -29,7 +34,6 @@ def search_similar_faces(image_path):
     try:
         # Extract embedding
         query_emb = extract_embedding(image_path)
-        print("query embeddings extracted successfully!")
         if query_emb is None:
             return {
                 "success": False,
@@ -71,10 +75,20 @@ def search_similar_faces(image_path):
         }
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print(json.dumps({"error": "Image path required"}))
+    try:
+        if len(sys.argv) < 2:
+            result = {"error": "Image path required"}
+            print(json.dumps(result))
+            sys.exit(1)
+        
+        image_path = sys.argv[1]
+        result = search_similar_faces(image_path)
+        print(json.dumps(result))
+        sys.stdout.flush()
+        sys.exit(0)
+    except Exception as e:
+        # Ensure we always return valid JSON
+        error_result = {"success": False, "error": f"Script error: {str(e)}"}
+        print(json.dumps(error_result))
+        sys.stdout.flush()
         sys.exit(1)
-    
-    image_path = sys.argv[1]
-    result = search_similar_faces(image_path)
-    print(json.dumps(result))

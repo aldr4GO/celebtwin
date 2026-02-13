@@ -7,11 +7,15 @@ import sys
 import json
 import os
 import numpy as np
+import logging
+
+# Suppress InsightFace and other library debug output
+logging.basicConfig(level=logging.CRITICAL)
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 # Add face_match folder to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'face_match'))
 
-from config import ARTIFACT_DIR
 from face_utils import extract_embedding
 
 def compare_faces(image_path1, image_path2):
@@ -52,11 +56,21 @@ def compare_faces(image_path1, image_path2):
         }
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print(json.dumps({"error": "Two image paths required"}))
+    try:
+        if len(sys.argv) < 3:
+            result = {"error": "Two image paths required"}
+            print(json.dumps(result))
+            sys.exit(1)
+        
+        image_path1 = sys.argv[1]
+        image_path2 = sys.argv[2]
+        result = compare_faces(image_path1, image_path2)
+        print(json.dumps(result))
+        sys.stdout.flush()
+        sys.exit(0)
+    except Exception as e:
+        # Ensure we always return valid JSON
+        error_result = {"success": False, "error": f"Script error: {str(e)}"}
+        print(json.dumps(error_result))
+        sys.stdout.flush()
         sys.exit(1)
-    
-    image_path1 = sys.argv[1]
-    image_path2 = sys.argv[2]
-    result = compare_faces(image_path1, image_path2)
-    print(json.dumps(result))

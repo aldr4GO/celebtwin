@@ -38,39 +38,93 @@ export async function POST(request: NextRequest) {
 
     // ✅ Absolute Python path
     const pythonScriptPath = '/app/compare_api.py';
+    const appDir = '/app';
 
     // ✅ safer command (no weird quoting issues)
-    const command = `python3 ${pythonScriptPath} "${filePath1}" "${filePath2}"`;
+    const command = `cd ${appDir} && python3 compare_api.py "${filePath1}" "${filePath2}"`;
 
     const { stdout, stderr } = await execAsync(command, {
       timeout: 120000,
       maxBuffer: 10 * 1024 * 1024,
+      cwd: appDir,
     });
 
-    console.log("STDOUT:", stdout);
-    console.log("STDERR:", stderr);
+    if (stderr) {
+      console.log("COMPARE STDERR (debug):", stderr);
+    }
+    console.log("COMPARE STDOUT:", stdout);
 
     // ❗ DO NOT fail just because stderr exists
     // InsightFace prints logs to stderr sometimes
 
     if (!stdout || stdout.trim().length === 0) {
-      throw new Error("Python returned empty output");
+      const errorMsg = stderr || 'Python returned empty output';
+      console.error('COMPARE - Empty output, stderr:', errorMsg);
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Comparison failed',
+          details: 'Python script produced no output',
+        },
+        { status: 500 }
+      );
     }
 
-    // ✅ Extract JSON safely
-    const jsonStart = stdout.indexOf('{');
+    // ✅ Extract JSON safely - most reliable method is to find last { and parse from there
+    const jsonStart = stdout.lastIndexOf('{');
     if (jsonStart === -1) {
-      throw new Error("No JSON found in Python output");
+      console.error('COMPARE - No JSON object found in output:', stdout);
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Comparison failed',
+          details: `No valid JSON in response. Got: ${stdout.substring(0, 100)}`,
+        },
+        { status: 500 }
+      );
     }
 
-    const jsonString = stdout.slice(jsonStart);
+    // Find the matching closing brace
+    let braceCount = 0;
+    let jsonEnd = -1;
+    for (let i = jsonStart; i < stdout.length; i++) {
+      if (stdout[i] === '{') braceCount++;
+      if (stdout[i] === '}') {
+        braceCount--;
+        if (braceCount === 0) {
+          jsonEnd = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (jsonEnd === -1) {
+      console.error('COMPARE - Incomplete JSON object found in output:', stdout);
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Comparison failed',
+          details: 'Incomplete JSON response from Python script',
+        },
+        { status: 500 }
+      );
+    }
+
+    const jsonString = stdout.slice(jsonStart, jsonEnd);
 
     let result;
     try {
       result = JSON.parse(jsonString);
     } catch (parseError) {
-      console.error("JSON PARSE ERROR:", jsonString);
-      throw new Error("Invalid JSON from Python");
+      console.error("COMPARE - JSON PARSE ERROR:", jsonString);
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Comparison failed',
+          details: 'Invalid JSON response from Python',
+        },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json(result);
