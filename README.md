@@ -1,6 +1,10 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
+Download visual studio build tools -> Desktop development with c++
+pip install -r requirements.txt
+npm install
+npm run dev
 
 First, run the development server:
 

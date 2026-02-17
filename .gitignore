@@ -1,6 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-public/data
+public/celeba
 face_match/artifacts
+public/img_align_celeba.zip
 # dependencies
 /node_modules
 /.pnp

@@ -221,7 +221,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800">
+    <div className="min-h-screen bg-linear-to-br from-slate-900 to-slate-800">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-12">
@@ -344,7 +344,7 @@ export default function Home() {
                 <button
                   onClick={handleSearch}
                   disabled={loading}
-                  className="w-full mt-6 bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition"
+                  className="w-full mt-6 bg-linear-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition"
                 >
                   {loading ? 'Searching...' : '🔍 Find Similar Faces'}
                 </button>
@@ -566,7 +566,7 @@ export default function Home() {
               <button
                 onClick={handleCompare}
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-lg transition text-lg mb-8"
+                className="w-full bg-linear-to-r from-blue-500 to-cyan-600 hover:from-blue-600 hover:to-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-4 px-6 rounded-lg transition text-lg mb-8"
               >
                 {loading ? 'Comparing...' : '👥 Compare Faces'}
               </button>
@@ -590,7 +590,7 @@ export default function Home() {
                   <div className="flex-1">
                     <div className="relative w-full h-64 bg-slate-700 rounded-lg flex items-center justify-center border-4 border-slate-600">
                       <div className="text-center">
-                        <div className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                        <div className="text-7xl font-bold text-transparent bg-clip-text bg-linear-to-r from-cyan-400 to-blue-500">
                           {compareResult.match_percentage?.toFixed(1)}%
                         </div>
                         <div className="text-slate-300 text-lg mt-4">

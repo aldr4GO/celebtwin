@@ -40,12 +40,13 @@ export async function POST(request: NextRequest) {
 
     // ✅ Absolute Python path
     const pythonScriptPath = '/app/compare_api.py';
-    const appDir = '/app';
+    // const appDir = '/app';
+    const appDir = '';
 
     // ✅ safer command (no weird quoting issues)
     console.log("⚙️ Running python...");
 
-    const command = `cd ${appDir} && python3 compare_api.py "${filePath1}" "${filePath2}"`;
+    const command = `cd ${appDir} && python compare_api.py "${filePath1}" "${filePath2}"`;
     
     const { stdout, stderr } = await execAsync(command, {
       timeout: 120000,

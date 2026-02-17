@@ -9,4 +9,5 @@ data
 datasets
 models
 
-public\data
+public\celeba
+public\img_align_celeba.zip

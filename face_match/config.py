@@ -1,8 +1,8 @@
 import os
 
 # Paths
-CELEBA_IMG_DIR = "data/celeba/img_align_celeba"
-CELEBA_IDENTITY_FILE = "data/celeba/identity_CelebA.txt"
+CELEBA_IMG_DIR = "public/celeba/img_align_celeba"
+CELEBA_IDENTITY_FILE = "public/celeba/identity_CelebA.txt"
 
 ARTIFACT_DIR = "artifacts"
 

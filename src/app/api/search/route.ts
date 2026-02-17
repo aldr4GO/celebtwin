@@ -33,8 +33,9 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     await fs.writeFile(filePath, Buffer.from(bytes));
 
-    const appDir = '/app';
-    const command = `cd ${appDir} && python3 search_api.py "${filePath}"`;
+    // const appDir = '/app';
+    const appDir = '';
+    const command = `cd ${appDir} && python search_api.py "${filePath}"`;
     
     try {
       const { stdout, stderr } = await execAsync(command, {
